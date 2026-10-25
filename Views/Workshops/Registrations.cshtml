@@ -1,0 +1,42 @@
+﻿@model IEnumerable<WorkshopRsvp.Models.Rsvp>
+@{
+    ViewData["Title"] = "Registrations";
+}
+
+<h1>Registrations</h1>
+
+@if (!Model.Any())
+{
+    <p>No one has registered yet.</p>
+}
+else
+{
+    <table class="table table-striped table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Workshop</th>
+                <th>Needs Accommodation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int count = 1;
+            }
+            @foreach (var rsvp in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@rsvp.FullName</td>
+                    <td>@rsvp.WorkshopTitle</td>
+                    <td>@(rsvp.NeedsAccommodation ? "Yes" : "No")</td>
+                </tr>
+                count++;
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-controller="Workshops" asp-action="RsvpForm" class="btn btn-primary me-2">New RSVP</a>
+<a asp-controller="Workshops" asp-action="Index" class="btn btn-outline-secondary">Back to Workshops</a>

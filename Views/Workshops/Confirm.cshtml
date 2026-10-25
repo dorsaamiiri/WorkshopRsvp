@@ -1,0 +1,25 @@
+﻿@model WorkshopRsvp.Models.Rsvp
+@{
+    ViewData["Title"] = "Confirmed";
+}
+
+<div class="alert alert-success mt-3">
+    <h4 class="mb-0">@ViewData["Message"]</h4>
+</div>
+
+<div class="card mb-4" style="max-width: 500px;">
+    <div class="card-header fw-bold">Your RSVP</div>
+    <div class="card-body">
+        <p><strong>Name:</strong> @Model.FullName</p>
+        <p><strong>Workshop:</strong> @Model.WorkshopTitle</p>
+        <p class="mb-0"><strong>Needs accommodation:</strong> @(Model.NeedsAccommodation ? "Yes" : "No")</p>
+    </div>
+</div>
+
+@if (Model.NeedsAccommodation)
+{
+    <p class="text-muted">We'll reach out before the workshop to arrange your accommodation.</p>
+}
+
+<a asp-controller="Workshops" asp-action="Registrations" class="btn btn-primary me-2">View All Registrations</a>
+<a asp-controller="Workshops" asp-action="RsvpForm" class="btn btn-outline-secondary">RSVP Again</a>

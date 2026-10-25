@@ -1,0 +1,45 @@
+﻿@model WorkshopRsvp.Models.Rsvp
+@{
+    ViewData["Title"] = "RSVP";
+    var workshops = ViewData["Workshops"] as string[] ?? Array.Empty<string>();
+}
+
+<h1>RSVP for a Workshop</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-controller="Workshops" asp-action="Confirm" method="post">
+
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label"></label>
+                <input asp-for="FullName" class="form-control" placeholder="e.g. Jane Smith" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="WorkshopTitle" class="form-label"></label>
+                <select asp-for="WorkshopTitle" class="form-select">
+                    <option value="">-- Choose a workshop --</option>
+                    @foreach (var workshop in workshops)
+                    {
+                        <option value="@workshop">@workshop</option>
+                    }
+                </select>
+                <span asp-validation-for="WorkshopTitle" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="NeedsAccommodation" class="form-check-input" />
+                <label asp-for="NeedsAccommodation" class="form-check-label"></label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit RSVP</button>
+            <a asp-controller="Workshops" asp-action="Index" class="btn btn-link">Back</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

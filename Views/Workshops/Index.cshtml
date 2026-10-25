@@ -1,0 +1,21 @@
+﻿@{
+    var workshops = ViewData["Workshops"] as string[] ?? Array.Empty<string>();
+}
+
+<div class="p-5 mb-4 bg-light rounded-3">
+    <h1 class="display-5 fw-bold">Workshop RSVP</h1>
+    <p class="lead">
+        Sign up for one of our hands-on ASP.NET Core workshops. Fill out a quick RSVP form,
+        let us know if you need any accommodations, and see who else is attending.
+    </p>
+    <a asp-controller="Workshops" asp-action="RsvpForm" class="btn btn-primary btn-lg me-2">RSVP Now</a>
+    <a asp-controller="Workshops" asp-action="Registrations" class="btn btn-outline-secondary btn-lg">View Registrations</a>
+</div>
+
+<h3>Available Workshops</h3>
+<ul class="list-group mb-4">
+    @foreach (var workshop in workshops)
+    {
+        <li class="list-group-item">@workshop</li>
+    }
+</ul>
