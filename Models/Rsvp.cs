@@ -4,6 +4,8 @@ namespace WorkshopRsvp.Models
 {
     public class Rsvp
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Please enter your full name.")]
         [Display(Name = "Full Name")]
         public string FullName { get; set; } = "";

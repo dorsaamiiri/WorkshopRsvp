@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WorkshopRsvp.Data;
 using WorkshopRsvp.Models;
 
 namespace WorkshopRsvp.Controllers
 {
     public class WorkshopsController : Controller
     {
-        // In-memory list of registrations, shared by all requests (static).
-        // It resets whenever the app restarts, which is fine for this lab.
-        private static readonly List<Rsvp> _registrations = new List<Rsvp>
+        private readonly ApplicationDbContext _context;
+
+        // The DbContext is given to us by dependency injection (registered in Program.cs)
+        public WorkshopsController(ApplicationDbContext context)
         {
-            new Rsvp { FullName = "Alex Martin", NeedsAccommodation = false, WorkshopTitle = "Routing Basics" },
-            new Rsvp { FullName = "Priya Singh", NeedsAccommodation = true,  WorkshopTitle = "Razor Essentials" }
-        };
+            _context = context;
+        }
 
         // The workshops people can choose from
         private static readonly string[] _workshops =
@@ -22,7 +23,6 @@ namespace WorkshopRsvp.Controllers
         };
 
         // GET: /Workshops
-        // Landing page describing the RSVP feature
         public IActionResult Index()
         {
             ViewData["Title"] = "Workshops";
@@ -31,7 +31,6 @@ namespace WorkshopRsvp.Controllers
         }
 
         // GET: /Workshops/RsvpForm
-        // Shows the empty RSVP form
         [HttpGet]
         public IActionResult RsvpForm()
         {
@@ -40,29 +39,30 @@ namespace WorkshopRsvp.Controllers
         }
 
         // POST: /Workshops/Confirm
-        // Receives the submitted form as an Rsvp model
+        // Shows the confirmation (saving to the database is not required in Lab 4)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Confirm(Rsvp model)
         {
-            // If required fields are missing, show the form again with error messages
             if (!ModelState.IsValid)
             {
                 ViewData["Workshops"] = _workshops;
                 return View("RsvpForm", model);
             }
 
-            _registrations.Add(model);
-
             ViewData["Message"] = $"Thanks for registering, {model.FullName}!";
-            return View(model); // strongly typed view: Confirm.cshtml
+            return View(model);
         }
 
         // GET: /Workshops/Registrations
-        // Shows all RSVPs in a table
+        // Reads all RSVPs from the database
         public IActionResult Registrations()
         {
-            return View(_registrations);
+            List<Rsvp> registrations = _context.Rsvps
+                .OrderBy(r => r.Id)
+                .ToList();
+
+            return View(registrations);
         }
     }
 }
